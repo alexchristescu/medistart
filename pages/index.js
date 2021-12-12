@@ -1,8 +1,12 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Suspense } from "react";
+import styles from "../styles/Home.module.css";
+import { firestore } from "../firebase";
+import { query, collection, getDocs } from "firebase/firestore";
+// import Materi from "./materi.server";
 
-export default function Home() {
+export default function Home({ data }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -17,7 +21,7 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing{" "}
           <code className={styles.code}>pages/index.js</code>
         </p>
 
@@ -53,17 +57,34 @@ export default function Home() {
       </main>
 
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
+        {data.map((data) => (
+          <>
+            <a href="_blank" className={styles.card}>
+              <h2 key={data.name}>{data.name}</h2>
+              <p key={data.description}>{data.description}</p>y
+            </a>
+          </>
+        ))}
+        {/* <Suspense fallback={<h1>Loading profile...</h1>}>
+          <Materi />
+        </Suspense> */}
       </footer>
     </div>
-  )
+  );
 }
+
+export const getStaticProps = async () => {
+  const q = query(collection(firestore, "test"));
+  const querySnapshot = await getDocs(q);
+
+  const data = [];
+  querySnapshot.forEach((doc) =>
+    data.push({ name: doc.data().name, description: doc.data().description })
+  );
+  // const temp = JSON.parse(JSON.stringify(ceva));
+  return {
+    props: {
+      data,
+    },
+  };
+};

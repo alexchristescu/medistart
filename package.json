@@ -8,9 +8,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "firebase": "^9.5.0",
     "next": "12.0.4",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react": "0.0.0-experimental-a65ceef37-20211130",
+    "react-dom": "0.0.0-experimental-a65ceef37-20211130",
+    "reactfire": "^4.2.1"
   },
   "devDependencies": {
     "eslint": "7.32.0",
